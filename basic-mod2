@@ -11,6 +11,6 @@ with open("message.txt") as file:
 	cleartext = ""
 	for i in inversemod:
 		x = letters[i - 1]
-		cleartext = cleartext + x
+		cleartext += x
 
 	print("picoCTF{" + cleartext + "}")
