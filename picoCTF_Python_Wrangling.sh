@@ -28,7 +28,7 @@ python3 ende.py
 
 # Usage: ende.py (-e/-d) [file]
 # Assuming -e is for encoding and -d is for decoding we run the following line to decode our flag.
-python3 -d flag.txt.en
+python3 ende.py -d flag.txt.en
 
 # Provide the password from pw.txt: 192ee2db192ee2db192ee2db192ee2db
 
