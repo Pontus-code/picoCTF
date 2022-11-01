@@ -26,9 +26,13 @@ flag = ''
 
 print("\n\n\n### Initializing cookie brute force attack on " + url + " ###\n\n\n")
 for value in range(29):	
+    # Creates a key:value pair {'name':'0'}.
     cookie['name'] = str(value)
-    response = requests.get(url, cookies=cookie) 
+    # Sends a GET request with the cookie above.
+    response = requests.get(url, cookies=cookie)
+    # Checks the HTML response text for picoCTF{xxxx} flag using regular expressions. Assigns it to a variable if found.
     flag = re.findall("picoCTF{.*}", response.text)
+    # Checks the response for *edible* cookies, just for fun.
     false_flag = re.findall("I love.*cookies!", response.text)
 
     print("Sending cookie: 'name' : '" + cookie['name'] + "'") 
