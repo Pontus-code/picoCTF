@@ -12,10 +12,10 @@
 # ssh ctf-player@venus.picoctf.net -p 51595
 # Provide the password 'ee38b88'
 
-# List the contents of the current directory
+# List the contents of the current directory.
 ls
 
-# this will show you a file '3of3.flag.txt.
+# This will show you a file '3of3.flag.txt'.
 
 # Assuming the other files with parts of the flag have similar names...
 find / -name "*flag.txt* 2>/dev/null
