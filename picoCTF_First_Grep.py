@@ -8,22 +8,20 @@
 # Description:
 # Can you find the flag in file? This would be really tedious to look through manually, something tells me there is a better way.
 
-# Imports argv from sys module.
-from sys import argv
-
+# Imports the requests module
+import requests
 # Imports the regular expressions module.
 import re
 
-# The script accepts a filename as an argument.
-script, filename = argv
+# URL for the file in the description.
+url = "https://jupiter.challenges.picoctf.org/static/495d43ee4a2b9f345a4307d053b4d88d/file"
 
-print(f"Opening '{filename}'...")
-print("Looking for the flag using regular expressions... picoCTF{.*}")
+# Requests the file.
+print(f"Downloading {url}...")
+response = requests.get(url)
 
-# Opens the file.
-with open(filename) as f:
-    # Uses the regular expression to find the flag in the text.
-    flag = re.findall("picoCTF{.*}", f.read())
+print("Searching for the flag using regular expressions... picoCTF{.*}")
+flag = re.findall("picoCTF{.*}", response.content.decode("UTF-8"))
 
 # Prints the flag.
 print("The flag is: " + ''.join(flag))
