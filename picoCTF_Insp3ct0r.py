@@ -51,7 +51,8 @@ for css in soup.find_all("link"):
 # Request each JavaScript file and scans for flag parts with regular expression.		
 for file in js_files:
 	print(f"\nFound the following JavaScript file: {file}")
-	print(f"Downloading {file}")
+	filename = ''.join(re.findall("\w*\.\w*$", file))
+	print(f"Downloading {filename}")
 	response = requests.get(file)
 	print(response)
 	print("Scanning for flag...")
@@ -68,7 +69,8 @@ for file in js_files:
 for file in css_files:
 	print("")
 	print(f"Found the following CSS file: {file}")
-	print(f"Downloading {file}")
+	filename = ''.join(re.findall("\w*\.\w*$", file))
+	print(f"Downloading {filename}")
 	response = requests.get(file)
 	print(response)
 	if response.status_code != 404:
