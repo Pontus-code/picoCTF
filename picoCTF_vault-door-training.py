@@ -22,8 +22,9 @@ import re
 
 # Address to source code file.
 url = "https://jupiter.challenges.picoctf.org/static/1afdf83322ee9c0040f8e3a3c047e18b/VaultDoorTraining.java"
+filename = ''.join(re.findall("\w*\.\w*$", url))
 
-print(f"Downloading {url}")
+print(f"Downloading {filename}")
 code = requests.get(url)
 print(f"---BEGINNING OF SOURCE CODE---")
 print(code.text)
