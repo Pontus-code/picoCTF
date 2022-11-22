@@ -8,14 +8,14 @@
 # Description:
 # Do you know how to move between directories and read files in the shell? Start the container, `ssh` to it, and then `ls` once connected to begin. Login via `ssh` as `ctf-player` with the password, `ee388b88`
 
-# For this challenge to work it has to be activated on the website first by pressing "Launch Instance".
+# For this challenge to work it has to be activated on the website first by pressing "Launch Instance"
 # Make sure you use the correct port number.
 
 # Imports the paramiko module for handling SSH connections.
 import paramiko
 
 host = "venus.picoctf.net" # Dont forget to "launch instance".
-port = 52784 # Changes between instances.
+port = 52933 # Changes between instances.
 username = "ctf-player"
 password = "ee388b88"
 
@@ -33,33 +33,43 @@ def ssh_command(host, port, username, password, cmd):
         print("No output, something went wrong...")
 
 
-print("Make sure you have launched an instance of this challenge at picoctf.com")
-print("Has the port number been updated?")
-cmd = ''
-cmd = input(f"What command do you want to send to {host}:{port}? ")
-ssh_command(host, port, username, password, cmd)
+# A dictionary of commands and comments.
+inputs =   {'ls': 'Lets start by listing the files in the working directory...', 
+            'find / -name "[1-3]of3.flag.txt" 2>/dev/null': 'Now lets find the other parts of the flag...',
+            'cat /home/ctf-player/drop-in/1of3.flag.txt': 'Reading the first part of the flag...',
+            'cat /2of3.flag.txt': 'Reading the second part of the flag...',
+            'cat /home/ctf-player/3of3.flag.txt': 'Reading the third part of the flag...',
+            'cat /home/ctf-player/drop-in/1of3.flag.txt /2of3.flag.txt /home/ctf-player/3of3.flag.txt | tr "\\n" " "': 'The complete flag is...'}
 
-print("Lets start by listing the files in the working directory...")
-cmd = 'ls'
-ssh_command(host, port, username, password, cmd)
+def flag():
+    for command in inputs:
+        print(inputs[command])
+        ssh_command(host, port, username, password, command)
+    
+def user():
+    cmd = input(f"What command do you want to send to {host}:{port}? ")
+    ssh_command(host, port, username, password, cmd)
 
-print("Now lets find the other parts of the flag...")
-cmd = 'find / -name "[1-3]of3.flag.txt" 2>/dev/null'
-ssh_command(host, port, username, password, cmd)
 
-print("Reading the first part of the flag...")
-cmd = 'cat /home/ctf-player/drop-in/1of3.flag.txt'
-ssh_command(host, port, username, password, cmd)
+while True:
+    print("Choose 0 to send a custom command to the server")
+    print("Choose 1 to initilize the flag finding script")
+    print("Choose 2 to exit.")
+    option = ''
+    try:
+        option = int(input("=> "))
+    finally:
+        if option == 0:
+            user()
+            continue
+        if option == 1:
+            flag()
+            continue
+        if option == 2:
+            print("Exiting...")
+            break
+        else:
+            print("Invalid options. Try again...")
+            continue
 
-print("Reading the second part of the flag...")
-cmd = 'cat /2of3.flag.txt'
-ssh_command(host, port, username, password, cmd)
-
-print("Reading the third part of the flag...")
-cmd = 'cat /home/ctf-player/3of3.flag.txt'
-ssh_command(host, port, username, password, cmd)
-
-print("The complete flag is...")
-cmd = "cat /home/ctf-player/drop-in/1of3.flag.txt /2of3.flag.txt /home/ctf-player/3of3.flag.txt | tr '\\n' ' '"
-ssh_command(host, port, username, password, cmd)
 
