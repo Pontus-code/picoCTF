@@ -45,6 +45,36 @@ def decipher(numbers): # Converts the numbers to corresponding position in the a
     return flag # return the flag as the functions output.
          
 
-showimage()
-print(f"The image displays the following characters: {' '.join(numbers)}")
-print(f"Converting the numbers to their corresponding position in the alphabet: {decipher(numbers)}")
+def show_numbers():
+    print(f"The image displays the following characters: {' '.join(numbers)}")
+
+def show_flag():
+    print(f"Converting the numbers to their corresponding position in the alphabet: {decipher(numbers)}")
+
+
+while True:
+    print("")
+    print("Choose 0 to open the picture file.")
+    print("Choose 1 to show the numbers from the picture file.")
+    print("Choose 2 to decipher the numbers and show the flag.")
+    print("Choose 3 to exit.")
+    try:
+        option = int(input("=> "))
+    finally:
+        if option == 0:
+            showimage()
+            continue
+        if option == 1:
+            show_numbers()
+            continue
+        if option == 2:
+            show_flag()
+            continue
+        if option == 3:
+            print("Exiting...")
+            break
+        else:
+            print("Invalid options. Try again...")
+            continue
+
+
