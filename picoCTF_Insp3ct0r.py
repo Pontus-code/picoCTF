@@ -31,17 +31,18 @@ parts = []
 # Adds the HTML file to the list.
 files.append((url + "/index.html"))
 
+# Finds any CSS files and adds them to the list.
+for css in soup.find_all("link"):
+	if css.attrs.get("href"):
+		css_url = css.attrs.get("href")
+		files.append(url + "/" + css_url)
+
 # Finds any JavaScript files and adds them to the list.
 for script in soup.find_all("script"):
 	if script.attrs.get("src"):
 		script_url = script.attrs.get("src")
 		files.append(url + "/" + script_url)
 
-# Finds any CSS files and adds them to the list.
-for css in soup.find_all("link"):
-	if css.attrs.get("href"):
-		css_url = css.attrs.get("href")
-		files.append(url + "/" + css_url)
 
 # Requests all files in list and scans them for flag part using regular expressions.
 def scan(files):
@@ -59,7 +60,7 @@ def scan(files):
 				print(f"Matched this line: {''.join(hint).strip()}")
 				part = re.findall("(?<=flag: )\S*", str(hint))
 				print(f"Matched this flag part: {''.join(part)}")
-				parts.append(part)
+				parts.append(''.join(part))
 			else:
 				print("No flag found...")
 		else:
@@ -68,10 +69,7 @@ def scan(files):
 scan(files)
 
 # Prints the whole flag from its parts.
-print("\nThe complete flag is: ", end = '')
-for part in [0,2,1]:
-	print(''.join(parts[part]), end = '')
-print("")
+print("\nThe complete flag is: " + ''.join(parts))
 
 
 
