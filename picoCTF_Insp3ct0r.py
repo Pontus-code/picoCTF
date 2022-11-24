@@ -18,35 +18,30 @@ import re
 
 url = "http://jupiter.challenges.picoctf.org:41511"
 
+
+# Sends a GET request to the url and parse the HTML for files with BeautifulSoup.
+response = requests.get(url)
+soup = BeautifulSoup(response.text, "lxml")
+
+# List of files 
+files = []
 # Creates an empty list for flag parts.
 parts = []
 
-# Sends a GET request to the url.
-response = requests.get(url)
-
-print("\nScanning the HTML source code for flag parts...")
-hint = re.findall(".*flag.*", response.text)
-print(f"Matched this line: {''.join(hint).strip()}")
-part = re.findall("(?<=flag: )\S*", str(hint))
-print(f"Matched this flag part: {''.join(part)}")
-parts.append(part)
-
-soup = BeautifulSoup(response.text, "lxml")
-
-js_files = []
-css_files = []
+# Adds the HTML file to the list.
+files.append((url + "/index.html"))
 
 # Finds any JavaScript files and adds them to the list.
 for script in soup.find_all("script"):
 	if script.attrs.get("src"):
 		script_url = script.attrs.get("src")
-		js_files.append(url + "/" + script_url)
+		files.append(url + "/" + script_url)
 
 # Finds any CSS files and adds them to the list.
 for css in soup.find_all("link"):
 	if css.attrs.get("href"):
 		css_url = css.attrs.get("href")
-		css_files.append(url + "/" + css_url)
+		files.append(url + "/" + css_url)
 
 # Requests all files in list and scans them for flag part using regular expressions.
 def scan(files):
@@ -70,17 +65,10 @@ def scan(files):
 		else:
 			print("Download failed...")
 
-
-scan(js_files)
-scan(css_files)
-
-# Prints the flag parts in order.
-print(f"\nFlag part 1/3 is {''.join(parts[0])}")
-print(f"Flag part 2/3 is {''.join(parts[2])}")
-print(f"Flag part 3/3 is {''.join(parts[1])}")
+scan(files)
 
 # Prints the whole flag from its parts.
-print("\nThe flag is ", end = '')
+print("\nThe complete flag is: ", end = '')
 for part in [0,2,1]:
 	print(''.join(parts[part]), end = '')
 print("")
