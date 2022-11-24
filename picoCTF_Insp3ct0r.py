@@ -48,43 +48,31 @@ for css in soup.find_all("link"):
 		css_url = css.attrs.get("href")
 		css_files.append(url + "/" + css_url)
 
-# Request each JavaScript file and scans for flag parts with regular expression.		
-for file in js_files:
-	print(f"\nFound the following JavaScript file: {file}")
-	filename = ''.join(re.findall("\w*\.\w*$", file))
-	print(f"Downloading {filename}")
-	response = requests.get(file)
-	print(response)
-	print("Scanning for flag...")
-	hint = re.findall(".*flag.*", response.text)
-	if hint:
-		print(f"Matched this line: {''.join(hint).strip()}")
-		part = re.findall("(?<=flag: )\S*", str(hint))
-		print(f"Matched this flag part: {''.join(part)}")
-		parts.append(part)
-	else:
-		print("No flag found...")
-
-# Requests all CSS files and scans them for flag part using regular expressions.
-for file in css_files:
-	print("")
-	print(f"Found the following CSS file: {file}")
-	filename = ''.join(re.findall("\w*\.\w*$", file))
-	print(f"Downloading {filename}")
-	response = requests.get(file)
-	print(response)
-	if response.status_code != 404:
-		print("Scanning for flag...")
-		hint = re.findall(".*flag.*", response.text)
-		if hint:
-			print(f"Matched this line: {''.join(hint).strip()}")
-			part = re.findall("(?<=flag: )\S*", str(hint))
-			print(f"Matched this flag part: {''.join(part)}")
-			parts.append(part)
+# Requests all files in list and scans them for flag part using regular expressions.
+def scan(files):
+	for file in files:
+		print("")
+		print(f"Found the following file: {file}")
+		filename = ''.join(re.findall("\w*\.\w*$", file))
+		print(f"Downloading {filename}")
+		response = requests.get(file)
+		print(response)
+		if response.status_code != 404:
+			print("Scanning for flag...")
+			hint = re.findall(".*flag.*", response.text)
+			if hint:
+				print(f"Matched this line: {''.join(hint).strip()}")
+				part = re.findall("(?<=flag: )\S*", str(hint))
+				print(f"Matched this flag part: {''.join(part)}")
+				parts.append(part)
+			else:
+				print("No flag found...")
 		else:
-			print("No flag found...")
-	else:
-		print("Download failed...")
+			print("Download failed...")
+
+
+scan(js_files)
+scan(css_files)
 
 # Prints the flag parts in order.
 print(f"\nFlag part 1/3 is {''.join(parts[0])}")
