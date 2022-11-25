@@ -10,9 +10,8 @@
 
 import base64
 
-base64_string = "bDNhcm5fdGgzX3IwcDM1"
-base64_bytes = base64_string.encode("ascii")
-decoded_bytes = base64.b64decode(base64_bytes)
-decoded_string = decoded_bytes.decode("ascii")
+enc = "bDNhcm5fdGgzX3IwcDM1"
 
-print("The flag is: picoCTF{" + decoded_string + "}")
+flag = base64.b64decode(enc).decode()
+
+print("The flag is: picoCTF{" + flag + "}")
