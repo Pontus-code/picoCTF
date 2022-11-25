@@ -24,7 +24,7 @@ for rotation in range(1, len(alphabet)):
         new_index = (index + rotation) % len(alphabet)
         # Assigns the deciphered character.
         deciphered = alphabet[new_index]
-        cleartext = cleartext + deciphered
+        cleartext += deciphered
     # Ends each nested loop with printing the possible flag.
     print("Rotation of " + str(rotation) + " gives the possible flag: picoCTF{" + cleartext + "}")
    
