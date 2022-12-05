@@ -10,7 +10,7 @@
 import requests
 from zipfile import ZipFile
 import re
-import os
+import io
 
 url = "https://artifacts.picoctf.net/c/551/files.zip"
 filename = ''.join(re.findall("\w+\.\w+$", url))
@@ -19,24 +19,12 @@ filename = ''.join(re.findall("\w+\.\w+$", url))
 print(f"Requesting data from {url}")
 f = requests.get(url)
 
-print(f"Writing data to {filename}")
-with open(filename, 'wb') as file:
-    file.write(f.content)
-
-print(f"Extracting all files from {filename}")
-with ZipFile(filename, 'r') as zip_ref:
-    zip_ref.extractall()
-
-print(f"Opening all extracted files and searching for the picoCTF-flag using regular expressions...")
-for root, dirs, files in os.walk('./files/', topdown=True):
-    # Creating a file path for every file in every directory.
-    for name in files:
-        location = os.path.join(root + "/" + name)
-    print(f"Searching {location}: ")
-    with open(location) as txt:
-        flag = ''.join(re.findall("picoCTF{.*}", txt.read()))
-        if flag:
-            flag_location = location
-
-print(f"\nFlag location: {flag_location}")
-print(f"The flag is: {flag}")
+print(f"Opening {filename} using the zipfile module...")
+with ZipFile(io.BytesIO(f.content)) as myzip:
+    print(f"Reading every file within {filename} looking for the flag...")
+    for filepath in myzip.namelist():
+        with myzip.open(filepath) as text:
+            flag = ''.join(re.findall("picoCTF{.*}", text.read().decode()))
+            if flag:
+                print(f"The flag was found in {filepath}")
+                print(flag)
