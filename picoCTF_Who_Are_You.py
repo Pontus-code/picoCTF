@@ -24,7 +24,7 @@ headers = {
 }
 
 print(f"\nSending a GET request to {url}")
-r = requests.get(url,)
+r = requests.get(url)
 message = ''.join(re.findall("(?<=\>).*(?=\<\/h3\>)", r.text)).replace('&#39;', '\'')
 print(message)
 
