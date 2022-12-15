@@ -93,6 +93,4 @@ for i in range(3):
     send(client, word)
     counter += 1
 
-response = client.recv(4096)
-flag = response.decode()
-print(flag)
+receive(client)
